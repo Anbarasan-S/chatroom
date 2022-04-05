@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react';
 import { io } from 'socket.io-client';
 import {Avatar} from '@material-ui/core'
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import './App.css'
 import {Card, Container,Button} from 'react-bootstrap';
 const socket=io.connect('http://localhost:5000');
 function App() {
@@ -13,9 +13,10 @@ function App() {
       socket.emit('message',{name,message});
       setState({message:'',name:name})
   }
+
+  
 useEffect(()=>{
     socket.on('message',({name,message})=>{
-      console.log("s");
       setChat([...chat,{name,message}]);
     });
 },[chat])
@@ -31,18 +32,22 @@ const messageRenderer=()=>{
   ));
 } 
   return (
-    <Container>
-      <Card style={{ width: '50rem'}} >
+    <div className="container">
+      <Card className="card" >
   <Card.Body>
-      <h1 style={{color:"green"}}>Messenger</h1>
-    <Avatar />  
-    <div className='name'>Anbu</div>
+      <h1 style={{color:"lightgreen"}}>Messenger</h1>
+      <span>
+    <Avatar/>  
+    </span>
+    <span className='name'>{state.name}</span>
       {messageRenderer()}
-    <textarea className="form-control" value={state.message} onChange={changeMessage}></textarea>
+    <textarea className="form-control textarea" value={state.message} onChange={changeMessage} ></textarea>
+    <div style={{display:"flex",alignItems:"center",justifyContent:"center",marginTop:"2rem"}}>
     <Button onClick={messageTurnIn}>Send</Button>
+    </div>
   </Card.Body>
 </Card>
-    </Container>
+    </div>
   );
 }
 
